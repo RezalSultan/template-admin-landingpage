@@ -10,43 +10,50 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use Inertia\Response;
+use Illuminate\Validation\ValidationException;
 
 class AuthenticatedSessionController extends Controller
 {
-    /**
-     * Display the login view.
-     */
-    public function create(): Response
-    {
-        return Inertia::render('Admin/Auth/Login', [
-            'canResetPassword' => Route::has('password.request'),
-            'status' => session('status'),
-        ]);
+  /**
+   * Display the login view.
+   */
+  public function create(): Response
+  {
+    return Inertia::render('Admin/Auth/Login', [
+      'canResetPassword' => Route::has('password.request'),
+      'status' => session('status'),
+      'errorMessage' => session('danger'),
+    ]);
+  }
+
+  /**
+   * Handle an incoming authentication request.
+   */
+  public function store(LoginRequest $request): RedirectResponse
+  {
+    try {
+      $request->authenticate();
+
+      $request->session()->regenerate();
+
+      return redirect()->intended(route('dashboard', absolute: false))
+        ->with('success', 'Login berhasil! Selamat datang kembali.');
+    } catch (\Exception $e) {
+      return back()->with('danger', 'Email atau password salah');
     }
+  }
 
-    /**
-     * Handle an incoming authentication request.
-     */
-    public function store(LoginRequest $request): RedirectResponse
-    {
-        $request->authenticate();
+  /**
+   * Destroy an authenticated session.
+   */
+  public function destroy(Request $request): RedirectResponse
+  {
+    Auth::guard('web')->logout();
 
-        $request->session()->regenerate();
+    $request->session()->invalidate();
 
-        return redirect()->intended(route('dashboard', absolute: false));
-    }
+    $request->session()->regenerateToken();
 
-    /**
-     * Destroy an authenticated session.
-     */
-    public function destroy(Request $request): RedirectResponse
-    {
-        Auth::guard('web')->logout();
-
-        $request->session()->invalidate();
-
-        $request->session()->regenerateToken();
-
-        return redirect('/');
-    }
+    return redirect('/admin/login');
+  }
 }
