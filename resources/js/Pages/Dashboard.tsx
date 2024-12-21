@@ -12,14 +12,9 @@ export default function Dashboard({ success }: { success?: string }) {
       });
     }
   }, [success]);
+
   return (
-    <AuthenticatedLayout
-      header={
-        <h2 className="text-xl font-semibold leading-tight text-gray-800 dark:text-gray-200">
-          Dashboard
-        </h2>
-      }
-    >
+    <AuthenticatedLayout label="Dashboard">
       <Head title="Dashboard" />
 
       <div className="py-12">

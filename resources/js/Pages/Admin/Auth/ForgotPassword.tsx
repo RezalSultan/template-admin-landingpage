@@ -1,56 +1,76 @@
-import InputError from '@/Components/InputError';
-import PrimaryButton from '@/Components/PrimaryButton';
-import TextInput from '@/Components/TextInput';
-import GuestLayout from '@/Layouts/GuestLayout';
-import { Head, useForm } from '@inertiajs/react';
-import { FormEventHandler } from 'react';
+import InputError from "@/Components/InputError";
+import PrimaryButton from "@/Components/PrimaryButton";
+import TextInput from "@/Components/TextInput";
+import { Button } from "@/Components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/Components/ui/card";
+import { Input } from "@/Components/ui/input";
+import { Label } from "@/Components/ui/label";
+import GuestLayout from "@/Layouts/GuestLayout";
+import PreAuthLayout from "@/Layouts/PreAuthLayout";
+import { Head, useForm } from "@inertiajs/react";
+import { FormEventHandler } from "react";
 
 export default function ForgotPassword({ status }: { status?: string }) {
-    const { data, setData, post, processing, errors } = useForm({
-        email: '',
-    });
+  const { data, setData, post, processing, errors } = useForm({
+    email: "",
+  });
 
-    const submit: FormEventHandler = (e) => {
-        e.preventDefault();
+  const submit: FormEventHandler = (e) => {
+    e.preventDefault();
 
-        post(route('password.email'));
-    };
+    post(route("password.email"));
+  };
 
-    return (
-        <GuestLayout>
-            <Head title="Forgot Password" />
+  return (
+    <PreAuthLayout>
+      <Head title="Forgot Password" />
+      <Card className="z-10 w-[90%] md:mx-0 md:w-1/2 xl:w-5/12 2xl:w-fit">
+        <CardHeader className="w-full justify-center">
+          <CardTitle className="flex w-full items-center justify-center">
+            {/* <Image
+            src={"/logo-1.png"}
+            alt="logo"
+            width={180}
+            height={80}
+            className="-mb-3 w-[160px]"
+          /> */}
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="mb-4 text-sm text-gray-600 dark:text-gray-400">
+            Forgot your password? No problem. Just let us know your email
+            address and we will email you a password reset link that will allow
+            you to choose a new one.
+          </div>
 
-            <div className="mb-4 text-sm text-gray-600 dark:text-gray-400">
-                Forgot your password? No problem. Just let us know your email
-                address and we will email you a password reset link that will
-                allow you to choose a new one.
+          <form onSubmit={submit}>
+            <div>
+              <Label htmlFor="email">Email</Label>
+              <Input
+                id="email"
+                type="text"
+                value={data.email}
+                onChange={(e) => setData("email", e.target.value)}
+                placeholder="email"
+                disabled={processing}
+              />
+
+              <InputError message={errors.email} className="mt-2" />
+              <div className="mt-4 w-full">
+                <Button disabled={processing} type="submit" className="w-full">
+                  Email Password Reset Link
+                </Button>
+              </div>
             </div>
-
-            {status && (
-                <div className="mb-4 text-sm font-medium text-green-600 dark:text-green-400">
-                    {status}
-                </div>
-            )}
-
-            <form onSubmit={submit}>
-                <TextInput
-                    id="email"
-                    type="email"
-                    name="email"
-                    value={data.email}
-                    className="mt-1 block w-full"
-                    isFocused={true}
-                    onChange={(e) => setData('email', e.target.value)}
-                />
-
-                <InputError message={errors.email} className="mt-2" />
-
-                <div className="mt-4 flex items-center justify-end">
-                    <PrimaryButton className="ms-4" disabled={processing}>
-                        Email Password Reset Link
-                    </PrimaryButton>
-                </div>
-            </form>
-        </GuestLayout>
-    );
+          </form>
+        </CardContent>
+      </Card>
+    </PreAuthLayout>
+  );
 }
