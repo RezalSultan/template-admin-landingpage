@@ -14,7 +14,17 @@ import {
 } from "@/Components/ui/command";
 import { User } from "@/types";
 
-const UserPopoverAdmin = ({ user }: { user: User }) => {
+const UserPopoverAdmin = ({
+  user,
+  successProfileMessage,
+  successPassMessage,
+  errorMessage,
+}: {
+  user: User;
+  successProfileMessage?: string;
+  successPassMessage?: string;
+  errorMessage?: string;
+}) => {
   return (
     <div className="ml-auto">
       <Popover>
@@ -26,7 +36,7 @@ const UserPopoverAdmin = ({ user }: { user: User }) => {
             </button>
           </div>
         </PopoverTrigger>
-        <PopoverContent align="end">
+        <PopoverContent align="end" className="z-[200]">
           <Command>
             <h2>{user.name}</h2>
             <p className="mb-2 text-sm font-normal text-muted-foreground">
@@ -35,11 +45,18 @@ const UserPopoverAdmin = ({ user }: { user: User }) => {
             <CommandSeparator />
             <CommandList>
               <CommandGroup heading="Seting">
-                <CommandItem className="cursor-pointer text-muted-foreground hover:text-foreground hover:font-semibold">
-                  <ProfileSetting />
+                <CommandItem className="group cursor-pointer">
+                  <ProfileSetting
+                    user={user}
+                    successProfileMessage={successProfileMessage}
+                    errorMessage={errorMessage}
+                  />
                 </CommandItem>
-                <CommandItem className="cursor-pointer text-muted-foreground hover:text-foreground hover:font-semibold">
-                  <ChangePassSetting />
+                <CommandItem className="group cursor-pointer">
+                  <ChangePassSetting
+                    successPassMessage={successPassMessage}
+                    errorMessage={errorMessage}
+                  />
                 </CommandItem>
               </CommandGroup>
               <CommandSeparator />

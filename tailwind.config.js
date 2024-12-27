@@ -47,10 +47,15 @@ export default {
         accent: {
           DEFAULT: "hsl(var(--accent))",
           foreground: "hsl(var(--accent-foreground))",
+          two: "hsl(var(--accent-two))",
         },
         destructive: {
           DEFAULT: "hsl(var(--destructive))",
           foreground: "hsl(var(--destructive-foreground))",
+        },
+        success: {
+          DEFAULT: "hsl(var(--success))",
+          foreground: "hsl(var(--success-foreground))",
         },
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
@@ -69,6 +74,6 @@ export default {
   plugins: [
     forms,
     require("tailwindcss-animate"),
-    "prettier-plugin-tailwindcss",
+    require("tailwind-scrollbar")({ nocompatible: true }),
   ],
 };

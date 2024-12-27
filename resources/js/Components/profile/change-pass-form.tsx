@@ -9,41 +9,19 @@ import { Eye, EyeOff, RotateCcw } from "lucide-react";
 import { useState } from "react";
 import { Label } from "../ui/label";
 import InputError from "../InputError";
+import { useSuccessNotifier } from "@/lib/useSuccessNotifier";
 
-// const formSchema = z
-//   .object({
-//     old_password: z
-//       .string()
-//       .min(1, { message: "Password lama tidak boleh kosong" }),
-//     new_password: z
-//       .string()
-//       .min(8, { message: "Password baru minimal mempunyai 8 karakter" })
-//       .regex(/(?=.*[a-z])/, {
-//         message: "Password harus mengandung setidaknya satu huruf kecil",
-//       })
-//       .regex(/(?=.*[A-Z])/, {
-//         message: "Password harus mengandung setidaknya satu huruf besar",
-//       })
-//       .regex(/(?=.*\d)/, {
-//         message: "Password harus mengandung setidaknya satu angka",
-//       })
-//       .regex(/(?=.*[@$!%*?&])/, {
-//         message: "Password harus mengandung setidaknya satu simbol",
-//       }),
-//     confirm_new_password: z
-//       .string()
-//       .min(8, { message: "Password konfirmasi minimal mempunyai 8 karakter" }),
-//   })
-//   .refine((data) => data.new_password === data.confirm_new_password, {
-//     message: "Password baru dan konfirmasi password harus sama",
-//     path: ["confirm_new_password"],
-//   });
-
-const ChangePassForm = ({ errorMessage }: { errorMessage?: string }) => {
+const ChangePassForm = ({
+  errorMessage,
+  successPassMessage,
+}: {
+  errorMessage?: string;
+  successPassMessage?: string;
+}) => {
   const [spyPassOld, setSpyPassOld] = useState(false);
   const [spyPassNew, setSpyPassNew] = useState(false);
 
-  const { data, setData, post, processing, errors, reset } = useForm({
+  const { data, setData, patch, processing, errors, reset } = useForm({
     old_password: "",
     new_password: "",
     confirm_new_password: "",
@@ -51,14 +29,20 @@ const ChangePassForm = ({ errorMessage }: { errorMessage?: string }) => {
 
   const { resetErrorCount } = useErrorNotifier(
     "Gagal Ubah Password",
-    errorMessage
+    errorMessage,
+  );
+
+  const { resetSuccessCount } = useSuccessNotifier(
+    "Berhasil Ubah Password",
+    successPassMessage,
   );
 
   const onSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    post(route("admin.login"), {
+    patch(route("profile.edit.pass.request"), {
       onFinish: () => {
         resetErrorCount();
+        resetSuccessCount();
         reset();
       },
     });
@@ -99,7 +83,7 @@ const ChangePassForm = ({ errorMessage }: { errorMessage?: string }) => {
               <span className="absolute -right-2 -top-1 text-red-400">*</span>
               Password Baru
             </Label>
-            <p className="mt-0 text-xs w-full text-foreground">
+            <p className="mt-0 w-full text-xs text-foreground">
               Password harus memiliki setidaknya 1 huruf besar, 1 huruf kecil, 1
               angka, dan 1 simbol.
             </p>

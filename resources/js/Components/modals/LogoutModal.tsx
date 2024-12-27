@@ -23,7 +23,7 @@ const LogoutModal = () => {
     >
       <div className="flex w-full items-center justify-center gap-2 sm:justify-end">
         <Button onClick={storeModal.onClose}>Batal</Button>
-        <Button variant={"destructive"} onClick={handleLogout}>
+        <Button variant={"outline"} onClick={handleLogout}>
           Keluar
         </Button>
       </div>

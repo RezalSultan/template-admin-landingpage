@@ -1,11 +1,11 @@
 import { ColumnDef } from "@tanstack/react-table";
 import { ArrowUpDown } from "lucide-react";
 import DataListAction from "./ActionDropdown";
-import { User } from "@/types";
+import { DataBlogSchema } from "@/types/BlogType";
 
-type ColumnProps = User;
+type ColumnProps = DataBlogSchema;
 
-export const columns: ColumnDef<ColumnProps>[] = [
+export const columns = (errorMessage?: string): ColumnDef<ColumnProps>[] => [
   {
     accessorKey: "id",
     cell: (info) => info.row.index + 1,
@@ -21,17 +21,69 @@ export const columns: ColumnDef<ColumnProps>[] = [
     },
   },
   {
-    accessorKey: "name",
-    header: "Nama Lengkap",
+    accessorKey: "cover_image",
+    header: "Foto Sampul",
+    cell: ({ row }) => {
+      return (
+        <>
+          {row.original.cover_image ? (
+            <img
+              src={`/${row.original.cover_image}`}
+              alt="foto sampul"
+              className="h-12 max-w-16 rounded-sm object-contain"
+            />
+          ) : (
+            "-"
+          )}
+        </>
+      );
+    },
   },
   {
-    accessorKey: "email",
-    header: "Email",
-    cell: ({ row }) => (row.original.email === "" ? "-" : row.original.email),
+    accessorKey: "title",
+    header: "Judul Artikel",
+  },
+  {
+    accessorKey: "status",
+    header: "Status",
+    cell: ({ row }) => {
+      return (
+        <>
+          {row.original.status === "DRAFT" ? (
+            <p className="w-fit rounded-md bg-neutral-300 px-3 py-1">draft</p>
+          ) : (
+            <p className="w-fit rounded-md bg-success px-3 py-1 text-success-foreground">
+              publish
+            </p>
+          )}
+        </>
+      );
+    },
+  },
+  {
+    accessorKey: "author",
+    header: "Penulis",
+    cell: ({ row }) => (row.original.author ? row.original.author : "Admin"),
+  },
+  {
+    accessorKey: "updated_at",
+    header: "Tanggal",
+    cell: ({ row }) => {
+      const formattedDate = row.original.updated_at
+        ? new Intl.DateTimeFormat("id-ID", {
+            year: "numeric",
+            month: "short",
+            day: "numeric",
+          }).format(new Date(row.original.updated_at))
+        : "-";
+      return <>{formattedDate}</>;
+    },
   },
   {
     id: "actions",
     header: "Aksi",
-    cell: ({ row }) => <DataListAction dataUser={row.original} />,
+    cell: ({ row }) => (
+      <DataListAction errorMessage={errorMessage} dataBlog={row.original} />
+    ),
   },
 ];

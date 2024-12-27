@@ -36,7 +36,7 @@ class AuthenticatedSessionController extends Controller
 
       $request->session()->regenerate();
 
-      return redirect()->intended(route('dashboard', absolute: false))
+      return redirect()->intended(route('blog.index', absolute: false))
         ->with('success', 'Login berhasil! Selamat datang kembali.');
     } catch (\Exception $e) {
       return back()->with('danger', 'Email atau password salah');

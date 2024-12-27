@@ -11,12 +11,19 @@ import {
 import { UserCog } from "lucide-react";
 import SettingProfileForm from "./profile-form";
 import { useEffect, useState } from "react";
-import axios from "axios";
+import { User } from "@/types";
 
-const ProfileSetting = () => {
+const ProfileSetting = ({
+  user,
+  successProfileMessage,
+  errorMessage,
+}: {
+  user: User;
+  successProfileMessage?: string;
+  errorMessage?: string;
+}) => {
   const [isOpen, setIsOpen] = useState(false);
   const [isMounted, setIsMounted] = useState(false);
-  const [user, setUser] = useState();
 
   return (
     <>
@@ -27,11 +34,13 @@ const ProfileSetting = () => {
         >
           <UserCog
             size={22}
-            className="text-muted-foreground group-hover:text-foreground transition-all"
+            className="text-muted-foreground transition-all group-hover:text-foreground"
           />
-          <span className="ml-2">Profil</span>
+          <span className="ml-2 text-muted-foreground group-hover:font-semibold group-hover:text-foreground">
+            Profil
+          </span>
         </SheetTrigger>
-        <SheetContent>
+        <SheetContent className="z-[210]">
           <SheetHeader>
             <SheetTitle>Seting Profil</SheetTitle>
             <SheetDescription>
@@ -39,7 +48,11 @@ const ProfileSetting = () => {
               selesai.
             </SheetDescription>
           </SheetHeader>
-          <SettingProfileForm errorMessage={undefined} />
+          <SettingProfileForm
+            user={user}
+            successProfileMessage={successProfileMessage}
+            errorMessage={errorMessage}
+          />
         </SheetContent>
       </Sheet>
     </>

@@ -134,9 +134,16 @@ const Login = ({
             </div>
           </CardContent>
           <CardFooter>
-            <p className="w-full text-center text-sm">
-              <strong>Copyright &copy; 2025 Muhammad Rezal Sultan.</strong> All
-              rights reserved.
+            <p className="mb-3 text-center text-sm text-slate-500">
+              © Copyright 2025 Lorem Ipsum Developer by{" "}
+              <a
+                href="https://www.instagram.com/rezalsultan_p/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="font-bold text-white"
+              >
+                MRezalSultan
+              </a>
             </p>
           </CardFooter>
         </Card>

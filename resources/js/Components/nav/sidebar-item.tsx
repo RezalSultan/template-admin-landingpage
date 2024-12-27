@@ -1,5 +1,3 @@
-"use client";
-
 import { cn } from "@/lib/utils";
 import { Link, usePage } from "@inertiajs/react";
 import { LucideIcon } from "lucide-react";
@@ -19,11 +17,11 @@ const SidebarItem = ({ icon: Icon, label, href }: SidebarItemProps) => {
     <Link
       href={href}
       className={cn(
-        "relative group flex items-center text-muted gap-6 ml-4 rounded-tl-md rounded-bl-md px-4 text-sm font-normal transition-all hover:bg-background hover:font-semibold hover:text-foreground",
-        isActive && "bg-white text-foreground font-bold",
+        "group relative ml-4 flex items-center gap-6 rounded-bl-md rounded-tl-md px-4 text-sm font-normal text-muted transition-all hover:bg-background hover:font-semibold hover:text-foreground",
+        isActive && "bg-white font-bold text-foreground",
       )}
     >
-      <div className="flex items-center justify-center gap-x-2 py-2">
+      <div className="flex items-center justify-center gap-x-2 py-3">
         <Icon
           size={22}
           className={cn(
@@ -34,14 +32,14 @@ const SidebarItem = ({ icon: Icon, label, href }: SidebarItemProps) => {
         {label}
       </div>
       <div
-        className={` group-hover:z-[999] group-hover:bg-background w-2.5 h-2.5 absolute -top-2.5 right-0 transition-all ${isActive && "z-[99] bg-background"}`}
+        className={`absolute -top-2.5 right-0 h-2.5 w-2.5 transition-all group-hover:z-[999] group-hover:bg-background ${isActive && "z-[99] bg-background"}`}
       >
-        <div className="w-2.5 h-2.5 bg-primary rounded-br-full transition-all"></div>
+        <div className="h-2.5 w-2.5 rounded-br-full bg-primary transition-all"></div>
       </div>
       <div
-        className={` group-hover:z-[999] group-hover:bg-background w-2.5 h-2.5 absolute -bottom-2.5 right-0 transition-all ${isActive && "z-[99] bg-background"}`}
+        className={`absolute -bottom-2.5 right-0 h-2.5 w-2.5 transition-all group-hover:z-[999] group-hover:bg-background ${isActive && "z-[99] bg-background"}`}
       >
-        <div className="w-2.5 h-2.5 bg-primary rounded-tr-full"></div>
+        <div className="h-2.5 w-2.5 rounded-tr-full bg-primary"></div>
       </div>
     </Link>
   );

@@ -1,23 +1,44 @@
-import { Button } from "@/Components/ui/button";
-
-import { Edit, MoreHorizontal, Trash2, User as UserIcon } from "lucide-react";
+import { Edit, Eye, Trash2 } from "lucide-react";
 import AlertModal from "@/Components/modals/AlertModal";
 import { useState } from "react";
-import { toast } from "sonner";
-import { Separator } from "@/Components/ui/separator";
-import { User } from "@/types";
 import { Inertia } from "@inertiajs/inertia";
+import { DataBlogSchema } from "@/types/BlogType";
+import { useErrorNotifier } from "@/lib/useErrorNotifier";
+import { Link } from "@inertiajs/react";
 
 type CellActionProps = {
-  dataUser: User;
+  dataBlog: DataBlogSchema;
+  errorMessage?: string;
 };
 
-const ActionDropdown: React.FC<CellActionProps> = ({ dataUser }) => {
+const ActionDropdown: React.FC<CellActionProps> = ({
+  dataBlog,
+  errorMessage,
+}) => {
   const [openAlert, setOpenAlert] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  const onConfirm = async () => {
-    // fungsi nya
+  const { resetErrorCount } = useErrorNotifier(
+    "Gagal Hapus Artikel",
+    errorMessage,
+  );
+
+  const onConfirm = () => {
+    Inertia.delete(route("blog.delete", { id: dataBlog.id }), {
+      onBefore: () => {
+        setLoading(true);
+      },
+      onError: (errors) => {
+        console.log("Error:", errors);
+      },
+      onSuccess: () => {
+        Inertia.reload();
+      },
+      onFinish: () => {
+        resetErrorCount();
+        setLoading(false);
+      },
+    });
   };
 
   return (
@@ -28,21 +49,24 @@ const ActionDropdown: React.FC<CellActionProps> = ({ dataUser }) => {
         onConfrim={onConfirm}
         loading={loading}
       />
-      <div className="flex justify-start items-center gap-1">
-        <div
-          onClick={() => Inertia.visit(`/admin/blog/${dataUser.id}`)}
-          className="cursor-pointer"
+      <div className="flex items-center justify-start">
+        <Link
+          href={`/admin/my-blog/${dataBlog.slug}?id=${dataBlog.id}&tabs=preview`}
+          className="group cursor-pointer rounded-full p-1.5 transition-all hover:bg-secondary/50"
         >
-          <UserIcon size={16} className="mr-2" />
-        </div>
-        <div
-          onClick={() => Inertia.visit(`/admin/blog/edit/${dataUser.id}`)}
-          className="cursor-pointer"
+          <Eye size={18} className="text-foreground" />
+        </Link>
+        <Link
+          href={`/admin/my-blog/${dataBlog.slug}?id=${dataBlog.id}&tabs=edit`}
+          className="group cursor-pointer rounded-full p-1.5 transition-all hover:bg-secondary/50"
         >
-          <Edit size={16} className="mr-2" />
-        </div>
-        <div onClick={() => setOpenAlert(true)} className="cursor-pointer">
-          <Trash2 size={16} className="mr-2" />
+          <Edit size={18} className="text-primary" />
+        </Link>
+        <div
+          onClick={() => setOpenAlert(true)}
+          className="group cursor-pointer rounded-full p-1.5 transition-all hover:bg-secondary/50"
+        >
+          <Trash2 size={18} className="text-destructive" />
         </div>
       </div>
     </>

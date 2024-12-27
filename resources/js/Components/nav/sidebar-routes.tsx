@@ -1,24 +1,24 @@
 "use client";
 
-import { CircleHelp, Images, Layout, Newspaper } from "lucide-react";
+import { CircleHelp, Images, Layout, Newspaper, UserCheck } from "lucide-react";
 import SidebarItem from "./sidebar-item";
 
 const SidebarRoutes = () => {
   const routes = [
     {
-      icon: Layout,
-      label: "Dashboard",
-      href: "/admin/dashboard",
-    },
-    {
       icon: Newspaper,
-      label: "Blog Saya",
+      label: "Artikel Saya",
       href: "/admin/my-blog",
     },
     {
       icon: CircleHelp,
       label: "FAQ",
       href: "/admin/my-faq",
+    },
+    {
+      icon: UserCheck,
+      label: "Testimoni",
+      href: "/admin/testimony",
     },
     {
       icon: Images,
@@ -28,7 +28,7 @@ const SidebarRoutes = () => {
   ];
 
   return (
-    <nav className="flex w-full flex-col gap-2.5 mt-4">
+    <nav className="mt-4 flex w-full flex-col gap-2.5">
       {routes.map((route) => (
         <SidebarItem
           key={route.href}
